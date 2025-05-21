@@ -2,22 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Project;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Project;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
+
 use App\Filament\Resources\ProjectResource\Pages;
 
 /**
@@ -73,13 +75,14 @@ class ProjectResource extends Resource
                 ->maxValue((int) date('Y')),
             FileUpload::make('gambar')
                 ->label('Gambar Proyek')
-                ->multiple()
-                ->reorderable()
+                ->disk('public')
+                ->directory('projects') // Simpan ke storage/app/public/projects
                 ->preserveFilenames()
-                ->directory('projects')
-                ->maxFiles(10)
-                ->enableOpen()
-                ->enableDownload(),
+                ->image()
+                ->imageEditor()
+                ->visibility('public')
+                ->maxSize(2048), // Aktifkan upload multiple file
+
             Select::make('status')
                 ->options([
                     'draft' => 'Draft',
@@ -94,14 +97,14 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('judul')->sortable()->searchable(),
-                TextColumn::make('kategori.nama_kategori'),
-                TextColumn::make('tahun_proyek'),
-                BadgeColumn::make('status')
-                    ->colors([
-                        'secondary' => 'draft',
-                        'success' => 'publish',
-                    ]),
+            TextColumn::make('judul')->sortable()->searchable(),
+            TextColumn::make('kategori.nama_kategori'),
+            TextColumn::make('tahun_proyek'),
+            BadgeColumn::make('status')
+                ->colors([
+                'secondary' => 'draft',
+                'success' => 'publish',
+                ]),
             ])
             ->filters([
                 SelectFilter::make('status')->options([

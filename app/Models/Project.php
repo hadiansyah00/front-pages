@@ -2,17 +2,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+// use Spatie\MediaLibrary\HasMedia;
+// use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class Project extends Model implements HasMedia
+class Project extends Model
 {
-    use InteractsWithMedia;
+    // use InteractsWithMedia;
 
     protected $fillable = [
-        'judul', 'slug', 'deskripsi', 'kategori_id', 'tahun_proyek', 'status',
+        'judul', 'slug', 'deskripsi', 'kategori_id', 'tahun_proyek', 'status','gambar'
     ];
 
     protected static function booted()

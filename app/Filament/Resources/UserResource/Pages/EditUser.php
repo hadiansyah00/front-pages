@@ -17,17 +17,5 @@ class EditUser extends EditRecord
         ];
     }
 
-    public function canView(): bool
-    {
-        return auth()->user()?->hasRole('user-list');
-    }
-
-    protected function authorizeAccess(): void
-    {
-        abort_unless(auth()->user()?->hasRole('user-edit'), 403);
-    }
-
-    protected static bool $shouldRegisterNavigation = false;
-
-
+    // protected static bool $shouldRegisterNavigation = false;
 }
